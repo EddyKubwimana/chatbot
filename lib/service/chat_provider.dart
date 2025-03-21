@@ -5,11 +5,11 @@ import '../models/chat_message.dart';
 import 'dart:convert';
 
 class ChatProvider extends ChangeNotifier {
-  List<List<ChatMessage>> _chatHistory = []; // List of all chats
-  int _currentChatIndex = 0; // Index of the currently active chat
+  // history of chat  variable
+  List<List<ChatMessage>> _chatHistory = [];
+  int _currentChatIndex = 0;
 
   List<ChatMessage> get messages {
-    // Ensure _currentChatIndex is valid
     if (_chatHistory.isEmpty || _currentChatIndex >= _chatHistory.length) {
       return [];
     }
@@ -20,7 +20,7 @@ class ChatProvider extends ChangeNotifier {
     _loadChatHistory();
   }
 
-  // Load chat history from SharedPreferences
+  // Loading  history  of chat from SharedPreferences
   Future<void> _loadChatHistory() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? chatHistory = prefs.getString('chatHistory');
@@ -34,7 +34,6 @@ class ChatProvider extends ChangeNotifier {
       notifyListeners();
     }
 
-    // If no chats exist, start with an empty chat
     if (_chatHistory.isEmpty) {
       _chatHistory.add([]);
     }
@@ -53,7 +52,6 @@ class ChatProvider extends ChangeNotifier {
   Future<void> sendMessage(String userInput) async {
     if (userInput.isEmpty) return;
 
-    // Ensure _currentChatIndex is valid
     if (_chatHistory.isEmpty || _currentChatIndex >= _chatHistory.length) {
       return;
     }
@@ -63,7 +61,7 @@ class ChatProvider extends ChangeNotifier {
     notifyListeners();
     await _saveChatHistory();
 
-    // Get bot response
+    // API CALL
     String botResponse = await ApiService.getChatbotResponse(userInput);
 
     _chatHistory[_currentChatIndex]
@@ -72,14 +70,13 @@ class ChatProvider extends ChangeNotifier {
     await _saveChatHistory();
   }
 
-  // Start a new chat
+  // method to start a new chat
   void startNewChat() {
-    _chatHistory.add([]); // Add a new empty chat
-    _currentChatIndex = _chatHistory.length - 1; // Set as active chat
+    _chatHistory.add([]);
+    _currentChatIndex = _chatHistory.length - 1;
     notifyListeners();
   }
 
-  // Load a specific chat
   void loadChat(int index) {
     if (index >= 0 && index < _chatHistory.length) {
       _currentChatIndex = index;
@@ -87,7 +84,6 @@ class ChatProvider extends ChangeNotifier {
     }
   }
 
-  // Clear chat history
   Future<void> clearChat() async {
     _chatHistory.clear();
     _currentChatIndex = 0;
@@ -96,6 +92,5 @@ class ChatProvider extends ChangeNotifier {
     await prefs.remove('chatHistory');
   }
 
-  // Get chat history
   List<List<ChatMessage>> get chatHistory => _chatHistory;
 }

@@ -4,6 +4,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class ApiService {
   static Future<String> getChatbotResponse(String message) async {
+    // Condition to answer on the name of the chatbot
     if (message.toLowerCase().contains("your name") ||
         message.toLowerCase().contains("who are you") ||
         message.toLowerCase().contains("ton nom") ||
