@@ -119,7 +119,8 @@ class _ChatScreenState extends State<ChatScreen> {
                       ),
                       SizedBox(width: 8),
                       IconButton(
-                        icon: Icon(Icons.send, color: Colors.blue),
+                        icon: Icon(Icons.send,
+                            color: const Color.fromARGB(255, 34, 89, 133)),
                         onPressed: () {
                           if (_controller.text.isNotEmpty) {
                             chatProvider.sendMessage(_controller.text);
